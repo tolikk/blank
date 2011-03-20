@@ -1,0 +1,4 @@
+#define HELP_STRAX   100
+#define HELP_WARTA   101
+#define HELP_PRIVATE 102
+#define HELP_GREEN   103
