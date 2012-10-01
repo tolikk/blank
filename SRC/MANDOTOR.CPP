@@ -360,9 +360,10 @@ void ToRubles(double& Value)
    char buffer[32];
    if(!GetPrivateProfileString(MANDATORY_SECT, "RublMin", "10", buffer, sizeof buffer, ::ININame))
      return;
-
+   
+   Value = floor(Value * 100.0) / 100.0;
    //Value = int((Value + atof(buffer) / 2) / atof(buffer)) * atof(buffer);
-   Value = floor((Value + atof(buffer) / 2) / atof(buffer)) * atof(buffer);
+   Value = floor((Value + atof(buffer) / 2.0) / atof(buffer)) * atof(buffer);
 }
 
 int Type(unsigned long Data)
@@ -1925,26 +1926,33 @@ void MandatoryDlg::Print1()
 	 char* p1 = strtok(dest, " ");
 	 char* p2 = p1 ? strtok(NULL, ". ") : 0;
 	 char* p3 = p2 ? strtok(NULL, ". ") : 0;
-	 char s3[3];
-	 if(p3 != 0)
-	 {
-		p3[1] = 0;
-		strcpy(s3, p3);
+	 char* p4 = p3 ? strtok(NULL, ". ") : 0;
+
+	 if(p4 == 0 && p3 != 0) {
+	 	char s3[3];
+	 	if(p3 != 0)
+	 	{
+			p3[1] = 0;
+			strcpy(s3, p3);
+	 	}
+	 	if(p1 != 0 && p2 != 0)
+	 	{
+			p2[1] = 0;
+			char s[3]; strcpy(s, p2);
+			strcat(p1, " ");
+			strcat(p1, s);
+			strcat(p1, ".");
+	 	}
+	 	if(p1 != 0 && p3 != 0)
+	 	{
+			strcat(p1, " ");
+			strcat(p1, s3);
+			strcat(p1, ".");
+		}
 	 }
-	 if(p1 != 0 && p2 != 0)
-	 {
-		p2[1] = 0;
-		char s[3]; strcpy(s, p2);
-		strcat(p1, " ");
-		strcat(p1, s);
-		strcat(p1, ".");
+	 else {
+		 AgName1->GetText(dest, 30);
 	 }
-	 if(p1 != 0 && p3 != 0)
-	 {
-		strcat(p1, " ");
-		strcat(p1, s3);
-		strcat(p1, ".");
-	 } 
    }
 
    ((TRulerWin*)Parent)->SetValues(str);
@@ -2274,6 +2282,9 @@ void MandatoryDlg::CalculateSumma()
    }
 
    DblToStr(buffer, AllSumma, 2);
+//   sprintf(buffer, "%f", AllSumma);
+
+   //MessageBox(0,"1",buffer,0);
 
    //QQQQQQQQ
   double SuperK = 0;//K1 * K2 * (1.-Discount / 100.); --old calc
@@ -2338,6 +2349,7 @@ void MandatoryDlg::CalculateSumma()
    if(Pay1Curr->GetSelIndex() == 0)
    {
    	//Платим рублями
+//strcat(buffer, "~");
 	 e[20+2]->SetText(buffer); //All fee - подлежит уплдате страховой взнос
 
 	 if(IsFee2State)
@@ -2381,7 +2393,7 @@ void MandatoryDlg::CalculateSumma()
 	 }
    }
 
-   AllSumma = GlassTarif * SuperK;
+   AllSumma = floor(GlassTarif * SuperK * 1000.0) / 1000.0;
 
    if(!IsFee2State)  //1 Pay => rubli
        AllSumma *= Rate;
@@ -2410,18 +2422,18 @@ void MandatoryDlg::CalculateSumma()
       DblToStr(buffer, AllSumma, 2);
       if(Pay1Curr->GetSelIndex() == 0)
       {
-	e[22+2]->SetText(OwnPolis ? buffer : "0");
+		e[22+2]->SetText(OwnPolis ? buffer : "0");
         char buff2[32];
         DynStr buffer;
         strcpy(buffer, GetSummaText(AllSumma, Rubl));
-	strcat(buffer, ", (");
-	DblToStr(buff2, GlassTarif * SuperK * (Percent / 100.), 2);
-	strcat(buffer, buff2);
-	strcat(buffer, " евро х ");
-	e[18+2]->GetText(buff2, sizeof buff2);
-	strcat(buffer, buff2);
-	strcat(buffer, ")");
-	e[23+2]->SetText(buffer);
+		strcat(buffer, ", (");
+		DblToStr(buff2, GlassTarif * SuperK * (Percent / 100.), 2);
+		strcat(buffer, buff2);
+		strcat(buffer, " евро х ");
+		e[18+2]->GetText(buff2, sizeof buff2);
+		strcat(buffer, buff2);
+		strcat(buffer, ")");
+		e[23+2]->SetText(buffer);
       }
    }
    else { //Один этап
@@ -2430,7 +2442,7 @@ void MandatoryDlg::CalculateSumma()
 	   if(IsNal) {
 		 if(IsRounded) ToRubles(AllSumma);
        }
-       else { //Без нал
+	   else { //Без нал
 		 if(IsRounded)
 			AllSumma = floor(AllSumma + 0.5); //Надо бы применить ф-ию из реестра
 		 else
@@ -2438,6 +2450,8 @@ void MandatoryDlg::CalculateSumma()
 	   }
 
 		DblToStr(buffer, AllSumma, 2);
+   //sprintf(buffer, "%f", AllSumma);
+//		strcat(buffer, "!");
 		e[22+2]->SetText(buffer);
 	    e[23+2]->SetText(GetSummaText(atof(buffer), Rubl));
 	  }
