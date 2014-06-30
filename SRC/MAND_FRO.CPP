@@ -268,6 +268,7 @@ void MandatoryDlg::GetDataFromBase()
    {
 	   m_K3->AddString(_buffer2);
 	   m_K3->SetText(_buffer2);
+	   MessageBeep(0);
    }
    //"Placement",     //47
    // don't init (*base)(buffer2, sizeof buffer2, 47);

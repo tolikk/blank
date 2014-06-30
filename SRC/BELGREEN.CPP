@@ -263,8 +263,8 @@ void BELGREEN::SetupWindow()
    InitVal2(m_RetCurr);
    m_Curr1->DeleteString(m_Curr1->FindExactString("DM", -1));
    m_Curr2->DeleteString(m_Curr2->FindExactString("DM", -1));
-   m_Curr1->DeleteString(m_Curr1->FindExactString("RUR", -1));
-   m_Curr2->DeleteString(m_Curr2->FindExactString("RUR", -1));
+   //m_Curr1->DeleteString(m_Curr1->FindExactString("RUR", -1));
+   //m_Curr2->DeleteString(m_Curr2->FindExactString("RUR", -1));
 
    _FillAgents(&agents, m_Agent, BELGREEN_TBL);
    FillPlacement(m_Period, "Period%d", "BELGREEN", 0);
@@ -1778,7 +1778,7 @@ void BELGREEN::DupPolis(RTMessage msg)
 
 void ToRubles(double& Value);
 
-void ReplaceCurrs(TEdit* m_PayDate, char* OldCurr, TEdit* m_Pay1, TComboBox* m_Curr1, int IsUr)
+void ReplaceCurrsImpl(TEdit* m_PayDate, char* OldCurr, TEdit* m_Pay1, TComboBox* m_Curr1, int IsUr, int RoundMode)
 {
 		char dt[15];
 		m_PayDate->GetText(dt, sizeof dt);
@@ -1787,6 +1787,7 @@ void ReplaceCurrs(TEdit* m_PayDate, char* OldCurr, TEdit* m_Pay1, TComboBox* m_C
 		wsprintf(dt, "%s_NAL", OldCurr);
 		double Curr1 = GetRateCurrency(payDate, dt);
 		m_Curr1->GetText(dt, sizeof dt);
+		int isRub = strcmp(dt, "RUR")==0;
 		strcat(dt, "_NAL");
 		double Curr2 = GetRateCurrency(payDate, dt);
 		m_Curr1->GetText(OldCurr, sizeof OldCurr);
@@ -1799,10 +1800,15 @@ void ReplaceCurrs(TEdit* m_PayDate, char* OldCurr, TEdit* m_Pay1, TComboBox* m_C
 			else {
 				summ = long(summ * 100 + 0.005) / 100. + 1e-5;
 			}
-			sprintf(dt, IsUr ? "%0.2f" : "%0.0f", summ);
+			sprintf(dt, RoundMode == 1 && isRub ? "%0.0f" : IsUr ? "%0.2f" : "%0.0f", summ);
 			//sprintf(dt, "%0.5f", summ);
 			m_Pay1->SetText(dt);
 		}
+}
+
+void ReplaceCurrs(TEdit* m_PayDate, char* OldCurr, TEdit* m_Pay1, TComboBox* m_Curr1, int IsUr)
+{
+	ReplaceCurrsImpl(m_PayDate, OldCurr, m_Pay1, m_Curr1, IsUr, 0);
 }
 
 void BELGREEN::ChangeCurrency(RTMessage msg)
@@ -1813,7 +1819,7 @@ void BELGREEN::ChangeCurrency(RTMessage msg)
 			m_Pay1->SetText(BaseSumm);
 			strcpy(OldCurr, "EUR");
         }
-		ReplaceCurrs(m_PayDate, OldCurr, m_Pay1, m_Curr1, m_InsUr_->GetCheck());
+		ReplaceCurrsImpl(m_PayDate, OldCurr, m_Pay1, m_Curr1, m_InsUr_->GetCheck(), 1);
 	}
 }
 

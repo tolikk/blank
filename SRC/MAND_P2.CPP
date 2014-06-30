@@ -126,7 +126,7 @@ PetitionDlg::PetitionDlg(PTWindowsObject A, PetitionData* adata)
 	new TEdit(this, 103, 32);
 	new TDateEdit(this, 104, 11);
 	new TDateEdit(this, 105, 11);
-	new TEdit(this, 106, 64);
+	new TDateEdit(this, 106, 64);
 
 	r1 = new TRadioButton(this, 108, 0);
 	r2 = new TRadioButton(this, 109, 0);
@@ -3732,7 +3732,7 @@ int IsValidMandRecord(TOpenBase& base, int AskEngName, int AutoNmbCheck, const c
 	//Проверить номер полиса (выдан ли компании!!!)
 	if(!_IsValidPolisNumber(MANDATORY_SECT, base.GetString(0), base.GetDouble(1), 0, Agent_Code))
 		return 1;
-
+/*
 	DATE _1_7_2010;
 	PXDateEncode(7, 1, 2010, &_1_7_2010);
 
@@ -3748,7 +3748,7 @@ int IsValidMandRecord(TOpenBase& base, int AskEngName, int AutoNmbCheck, const c
           }
 
     }
-
+*/
 	if(GetAsyncKeyState(VK_SHIFT) & 0x8000)
 		if(GetAsyncKeyState(VK_CONTROL) & 0x8000)
 			return 0;
@@ -4515,7 +4515,7 @@ void MandatoryDlg::NalFunc(RTMessage msg)
    if(ModifyMandatory) {
       msg.LP.Hi = EN_CHANGE;
       ChangePay1Date(msg);
-      CalculateSumma();
+	  CalculateSumma();
    }
 }
 
@@ -4543,7 +4543,7 @@ void MandatoryDlg::KartaFunc(RTMessage msg)
    if(ModifyMandatory) {
       msg.LP.Hi = EN_CHANGE;
       ChangePay1Date(msg);
-      CalculateSumma();
+	  CalculateSumma();
    }
 }
 

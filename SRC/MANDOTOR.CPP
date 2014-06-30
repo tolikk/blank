@@ -1955,6 +1955,16 @@ void MandatoryDlg::Print1()
 	 }
    }
 
+   if(m_Vzamen->GetSelIndex() == 0) {
+     //((TComboBox*)e[3])->GetText(buffer.PrevSeria, sizeof buffer.PrevSeria);
+     *buffer.PrevSeria = 0;
+     *buffer.PrevNumber = 0;
+   }
+   dest += strlen(dest) + 1;
+   strcpy(dest, buffer.PrevSeria);
+   dest += strlen(dest) + 1;
+   strcpy(dest, buffer.PrevNumber);
+
    ((TRulerWin*)Parent)->SetValues(str);
    Dlg_base::Print1();
    delete str;
@@ -2622,7 +2632,7 @@ void MandatoryDlg::Clear()
         }
    }
 
-   if(m_K3->GetSelIndex() < 0) {      
+   if(m_K3->GetSelIndex() < 0) {
 	MessageBox(0, "K3", "!", 0);
    }
 
@@ -3007,13 +3017,13 @@ void MandatoryDlg::OpenClose()
 	 GetWindowRect(GetDlgItem(HWindow, 471), &rrr);
 	 int DeltaSize = rrr.right - rrr.left + 10;
 //	 int DeltaSize = 185;
-
+       //	     delta=DeltaSize;
      if(StartWidth >= WndWidth) { // to width
        //SendDlgItemMessage(HWindow, 450, WM_SETTEXT, 0, (LPARAM)"<<<");
        IsOpenPart2 = -1;
      }
      else { // to normal
-       delta = -1;
+       delta = -delta;
        DeltaSize = WndWidth - StartWidth + 1;
        //SendDlgItemMessage(HWindow, 450, WM_SETTEXT, 0, (LPARAM)">>>");
        IsOpenPart2 = 0;
