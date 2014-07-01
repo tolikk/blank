@@ -213,7 +213,8 @@ BELGREEN::BELGREEN(PTWindowsObject p)
 	m_Tarif[4] = new LockEdit(this, 317, 10, 4);
 	m_Tarif[5] = new LockEdit(this, 318, 10, 5);
 	m_Tarif[6] = new LockEdit(this, 319, 10, 6);
-  
+	m_Tarif[7] = new LockEdit(this, 350, 10, 7);
+
 	m_PayDate = new TDateEdit(this, 312, 11);
 	m_RepDate = new TDateEdit(this, 326, 11);
 	m_Pay1 = new NumberEdit(this, 327, 10, 1);
@@ -258,11 +259,17 @@ void BELGREEN::SetupWindow()
    m_DupType1->AddString("Взамен");
    m_DupType1->AddString("Дубликат");
 
+   char Letter[10] = "";
+   GetPrivateProfileString("BELGREEN", "Other", "", Letter, sizeof Letter, ININame);
+   if(*Letter) SetWindowText(GetDlgItem(HWindow, 1007), Letter);
+
    InitVal(m_Curr1);
    InitVal2(m_Curr2);
    InitVal2(m_RetCurr);
    m_Curr1->DeleteString(m_Curr1->FindExactString("DM", -1));
    m_Curr2->DeleteString(m_Curr2->FindExactString("DM", -1));
+   m_Curr1->DeleteString(m_Curr1->FindExactString("BRB", -1));
+   m_Curr2->DeleteString(m_Curr2->FindExactString("BRB", -1));
    //m_Curr1->DeleteString(m_Curr1->FindExactString("RUR", -1));
    //m_Curr2->DeleteString(m_Curr2->FindExactString("RUR", -1));
 
@@ -379,7 +386,7 @@ void BELGREEN::GetDataFromBase()
 	}
 
 	if(m_State != BELGREEN_BAD && m_State != BELGREEN_LOST_BY_AGENT) {
-	    if(Type < 0 || Type > 6) MessageBox(HWindow, "Ошибка типа", strBuffer, MB_OK | MB_ICONSTOP);
+	    if(Type < 0 || Type > 7) MessageBox(HWindow, "Ошибка типа", strBuffer, MB_OK | MB_ICONSTOP);
 
 	    (*base)(N, 16);
 		DblToStr(buffer.Tarif[Type], N, 0);
@@ -661,7 +668,7 @@ int BELGREEN::SetDataToBase()
       }
 	  (*base)(11, to_date);
 	  int IsSetTarif = 0;
-	  for(int Type = 0; Type < 7; Type++) {
+	  for(int Type = 0; Type < 8; Type++) {
 		  if(*buffer.Tarif[Type]) {
 			  (*base)(16, atof(buffer.Tarif[Type]));
 			  IsSetTarif = 1;
@@ -1202,7 +1209,7 @@ void BELGREEN::CalcTarif(int IndexAutoType)
 	 int IndexCountry = m_Country->GetSelIndex();
 	 int IndexPeriod = m_Period->GetSelIndex();
 	 if(IndexAutoType == -1) {
-		 for(int i = 0; i < 7; i++)
+		 for(int i = 0; i < 8; i++)
 			 if(m_Tarif[i]->GetTextLen())
 				 IndexAutoType = i;
      }
@@ -1238,7 +1245,7 @@ void BELGREEN::SetVal()
 {
 	 char buff[26] = "";
 
-	 for(int i = 0; i < 7; i++)
+	 for(int i = 0; i < 8; i++)
 		 if(m_Tarif[i]->GetText(buff, sizeof buff))
              break;
 
@@ -1308,7 +1315,7 @@ void BELGREEN::ChangeAutoType(RTMessage msg)
 {
    if(m_IsPricep->GetCheck()) return;
 
-   for(int i = 0; i < 7; i++)
+   for(int i = 0; i < 8; i++)
        m_Tarif[i]->SetText("");
    CalcTarif(msg.WParam);
 }
@@ -1387,6 +1394,8 @@ void BELGREEN::PrintData(int Flag)
 		GetPrivateProfileString("BELGREEN", "Trailer", Letter, dest, sizeof Letter, ININame);
 		 }
 	 }
+	 else if(*buffer.Tarif[7])
+		GetPrivateProfileString("BELGREEN", "Other", Letter, dest, sizeof Letter, ININame);
 	 else
 	 {
 		strcpy(dest, Letter);
