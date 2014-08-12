@@ -1090,7 +1090,10 @@ for(int i = 0; i < 10000; i++)
 	  int Readed = GetPrivateProfileString(MANDATORY_SECT, key, "", _buffer, _buffer._sizeof(), ::ININame);
       if(!Readed)
 		  continue;
-		m_K3->AddString(_buffer);
+		if(m_K3->FindExactString(_buffer, -1) == -1) {
+			m_K3->AddString(_buffer);
+                        }
+		
    }
    AlignCombo(m_K3);
    //fill tarif tables

@@ -263,11 +263,13 @@ void MandatoryDlg::GetDataFromBase()
    m_K3->SetSelIndex(-1);
 
    sprintf(_buffer2, "%g", DecodeK3(PlacementStr));
+   //MessageBox(0, "1", _buffer2, 0);
    m_K3->SetText(_buffer2);
    if(m_K3->GetSelIndex() == -1 && strcmp(_buffer2, "0"))
    {
 	   m_K3->AddString(_buffer2);
 	   m_K3->SetText(_buffer2);
+   //MessageBox(0, "Add", _buffer2, 0);
 	   MessageBeep(0);
    }
    //"Placement",     //47
