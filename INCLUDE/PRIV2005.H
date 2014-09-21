@@ -28,9 +28,9 @@ struct Private2005_data
   int	 InsType;
   char   FromDate[11];
   char   FromTime[6];
-  char   Period[4];
+  char   Period[5];
   char   ToDate[11];
-  char   Duration[4];
+  char   Duration[5];
   char   UridSumm[10];
   char   Tarif[10];
   char   Payment[10];

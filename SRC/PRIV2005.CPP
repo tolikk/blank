@@ -41,7 +41,7 @@
 #define max(a, b) ((a) > (b) ? (a) : (b))
 
 extern char ActivateParadox;
-static const char* FORMSECTION = "PRIV2005";
+static const char* FORMSECTION = "PRIV2014";
 void AlignCombo(TComboBox*);
 
 void FillPlacement(TComboBox* PlacementCombo, const char* Key, const char* = 0, int = 1);
@@ -129,9 +129,9 @@ Private2005Dlg::Private2005Dlg(PTWindowsObject p)
 	 m_InsFiz = new TCheckBox(this, 56, 0);
 	 m_FromDate = new TDateEdit(this, 213, 11);
 	 m_FromTime = new TTimeEdit(this, 60, 6);
-	 m_Period1 = new NumberEdit(this, 62, 4, 0);
+	 m_Period1 = new NumberEdit(this, 62, 5, 0);
 	 m_ToDate = new TDateEdit(this, 214, 11);
-	 m_Duration = new NumberEdit(this, 215, 4, 0);
+	 m_Duration = new NumberEdit(this, 215, 5, 0);
 
 	 m_UridSum = new NumberEdit(this, 61, 10, 1);
 	 m_Tarif = new NumberEdit(this, 217, 10, 1);

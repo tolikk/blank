@@ -3898,8 +3898,16 @@ void MandatoryDlg::ChangePay2Rate(RTMessage)
 void MandatoryDlg::ChangeResident(RTMessage msg)
 {
 	ASS();
-   if(msg.LP.Hi == CBN_SELCHANGE)
+   if(msg.LP.Hi == CBN_SELCHANGE) {
 	FillSuperCombo(-1, 1);
+
+	   char buff[16], key[32];
+   	sprintf(key, "TarifTable_Is_Resident%d", SendMessage(m_Resident->HWindow, CB_GETITEMDATA, m_Resident->GetSelIndex(), 0));
+  	 GetPrivateProfileString(MANDATORY_SECT, key, "", buff, sizeof buff, ININame);
+   		int IsResident = strcmp(buff, "YES") == 0;
+   	    Pay1Curr->SetText(IsResident ? "BRB" : "EUR");
+		ChCurr1(msg);
+   }
 }
 
 void MandatoryDlg::ChCurr1(RTMessage msg)

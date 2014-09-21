@@ -213,7 +213,8 @@ BELGREEN::BELGREEN(PTWindowsObject p)
 	m_Tarif[4] = new LockEdit(this, 317, 10, 4);
 	m_Tarif[5] = new LockEdit(this, 318, 10, 5);
 	m_Tarif[6] = new LockEdit(this, 319, 10, 6);
-	m_Tarif[7] = new LockEdit(this, 350, 10, 7);
+	m_Tarif[7] = new LockEdit(this, 350, 10, 7); //Прочее!!!
+ 	m_Tarif[8] = new LockEdit(this, 351, 10, 8);
 
 	m_PayDate = new TDateEdit(this, 312, 11);
 	m_RepDate = new TDateEdit(this, 326, 11);
@@ -386,7 +387,7 @@ void BELGREEN::GetDataFromBase()
 	}
 
 	if(m_State != BELGREEN_BAD && m_State != BELGREEN_LOST_BY_AGENT) {
-	    if(Type < 0 || Type > 7) MessageBox(HWindow, "Ошибка типа", strBuffer, MB_OK | MB_ICONSTOP);
+	    if(Type < 0 || Type > 8) MessageBox(HWindow, "Ошибка типа", strBuffer, MB_OK | MB_ICONSTOP);
 
 	    (*base)(N, 16);
 		DblToStr(buffer.Tarif[Type], N, 0);
@@ -668,7 +669,7 @@ int BELGREEN::SetDataToBase()
       }
 	  (*base)(11, to_date);
 	  int IsSetTarif = 0;
-	  for(int Type = 0; Type < 8; Type++) {
+	  for(int Type = 0; Type < 9; Type++) {
 		  if(*buffer.Tarif[Type]) {
 			  (*base)(16, atof(buffer.Tarif[Type]));
 			  IsSetTarif = 1;
@@ -860,7 +861,9 @@ int BELGREEN::SetDataToBase()
 	  }
 	  if(!IsDup) //NORMAL POLIS
 	  {
-		  if((reg_date + 31) < from_date || reg_date > from_date) {
+          int RegDateBeforehand = GetPrivateProfileInt("BELGREEN", "RegDateBeforehand", 92, ININame);
+          if(RegDateBeforehand <= 0) RegDateBeforehand = 1;
+		  if((reg_date + RegDateBeforehand) < from_date || reg_date > from_date) {
 		 	  MessageBox(HWindow, GetRCStr(594), "Ошибка", MB_OK | MB_ICONSTOP);
 			  SetFocus(m_RegDate->HWindow);
 		      return 0;
@@ -1209,7 +1212,7 @@ void BELGREEN::CalcTarif(int IndexAutoType)
 	 int IndexCountry = m_Country->GetSelIndex();
 	 int IndexPeriod = m_Period->GetSelIndex();
 	 if(IndexAutoType == -1) {
-		 for(int i = 0; i < 8; i++)
+		 for(int i = 0; i < 9; i++)
 			 if(m_Tarif[i]->GetTextLen())
 				 IndexAutoType = i;
      }
@@ -1237,6 +1240,7 @@ void BELGREEN::CalcTarif(int IndexAutoType)
 	 }
 
 	 while(*OneTarifStr == ' ') OneTarifStr++;
+	 
      m_Tarif[IndexAutoType]->SetText(isDup ? "0" : OneTarifStr);
 	 SetVal();
 }
@@ -1245,7 +1249,7 @@ void BELGREEN::SetVal()
 {
 	 char buff[26] = "";
 
-	 for(int i = 0; i < 8; i++)
+	 for(int i = 0; i < 9; i++)
 		 if(m_Tarif[i]->GetText(buff, sizeof buff))
              break;
 
@@ -1315,7 +1319,7 @@ void BELGREEN::ChangeAutoType(RTMessage msg)
 {
    if(m_IsPricep->GetCheck()) return;
 
-   for(int i = 0; i < 8; i++)
+   for(int i = 0; i < 9; i++)
        m_Tarif[i]->SetText("");
    CalcTarif(msg.WParam);
 }

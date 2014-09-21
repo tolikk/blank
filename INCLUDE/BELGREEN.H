@@ -42,7 +42,7 @@ struct BELGREEN_data
 	char RegDate[11];
 	char Time[6];
 
-	char Tarif[8][10];
+	char Tarif[9][10];
 
 	char PayDate[11];
 	char RepDate[11];
@@ -181,7 +181,7 @@ class BELGREEN: public Dlg_base
 	TEdit* m_RetDate;
 	TEdit* m_RetSumma;
 
-	LockEdit* m_Tarif[8];
+	LockEdit* m_Tarif[9];
 
 	TEdit* m_PayDate;
 	TEdit* m_RepDate;
