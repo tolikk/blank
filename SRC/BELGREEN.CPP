@@ -930,7 +930,9 @@ int BELGREEN::SetDataToBase()
 
 	  if(!IsDup)
 	  {
-		  if((Pay_date + (m_InsUr_->GetCheck() == 1 ? 365 : 31)) < from_date || Pay_date > reg_date)
+		  int RegDateBeforehand = GetPrivateProfileInt("BELGREEN", "RegDateBeforehand", 92, ININame);
+          if(RegDateBeforehand <= 0) RegDateBeforehand = 1;
+		  if((Pay_date + (m_InsUr_->GetCheck() == 1 ? 365 : RegDateBeforehand)) < from_date || Pay_date > reg_date)
 		  {
 			  SetFocus(m_PayDate->HWindow);
               return 0;
