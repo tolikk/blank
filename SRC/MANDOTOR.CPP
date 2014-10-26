@@ -2341,11 +2341,11 @@ void MandatoryDlg::CalculateSumma()
 	  e[21+2]->SetText("");
 	  e[23+2]->SetText("");
 	  
-	  if(GetFocus() != GetDlgItem(HWindow, 115)) {
+//	  if(GetFocus() != GetDlgItem(HWindow, 115)) {
 	    TMessage msg;msg.LP.Hi=EN_CHANGE;
-	    SetFocus( e[22+2]->HWindow);
+	    //SetFocus( e[22+2]->HWindow);
 	    ChangePay1(msg);
-	  }
+//  }
    }
 
    if(Pay1Curr->GetSelIndex() == 1)
@@ -2357,11 +2357,11 @@ void MandatoryDlg::CalculateSumma()
 
 	e[21+2]->SetText("");
 	e[23+2]->SetText("");
-	if(GetFocus() != GetDlgItem(HWindow, 115)) {
+	//if(GetFocus() != GetDlgItem(HWindow, 115)) {
 	  TMessage msg;msg.LP.Hi=EN_CHANGE;
-	  SetFocus( e[22+2]->HWindow);
+	  //SetFocus( e[22+2]->HWindow);
 	  ChangePay1(msg);
-     }
+//}
    }
   
    if(Pay1Curr->GetSelIndex() == 0)
