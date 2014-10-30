@@ -636,7 +636,7 @@ DATE GD(char* str, int msg = 0)
    if(!ch) goto bad_DATA;
    y = atoi(ch);
 
-   if((y > 99 && y < 1910) || y > 2020 || y < 10)
+   if((y > 99 && y < 1910) || y > 2030 || y < 10)
 	   goto bad_DATA;
 
    if(PXDateEncode(m, d, y, &D)) goto bad_DATA;

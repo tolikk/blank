@@ -1775,7 +1775,7 @@ void MandatoryDlg::Print1()
 
    double K3 = 1;
    char K3s[5]="";
-   if((m_Fizich->GetCheck()||m_IP->GetCheck()) && regdate >= fstSept)
+   if(/*(m_Fizich->GetCheck()||m_IP->GetCheck()) && */regdate >= fstSept)
    {
 	   m_K3->GetText(K3s, sizeof K3s);
 	   K3 = atof(K3s);
