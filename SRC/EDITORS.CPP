@@ -184,8 +184,14 @@ HMENU BuildMenu(char* Maska1, char* Maska2, char* ININame, char* Section)
 	for(int i = 0;; i++)
 	{
 		wsprintf(Key, Maska1, i);
-		if(!GetPrivateProfileString(Section, Key, "", buffer, buffer._sizeof(), ININame))
+		if(!GetPrivateProfileString(Section, Key, "", buffer, buffer._sizeof(), ININame)) {
+		   if(i == 0 && *ININame) {
+  		     char msg[64];
+                     sprintf(msg, "%s [%s]", ININame, Key);
+		     MessageBox(0, msg, "No menu!", 0);
+                   }
 		   break;
+                }
 
 		HMENU SubMenu = CreatePopupMenu();
 
