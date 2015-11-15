@@ -53,7 +53,7 @@ extern char ValidateInternalImport;
 char* GetCheckErrorText(int Err)
 {
 	static char* errBuffer = new char[128];
-	sprintf(errBuffer, "%d", Err);
+	sprintf(errBuffer, "Error #%d from checkerr.ini", Err);
 	GetPrivateProfileString(MANDATORY_SECT, errBuffer, errBuffer, errBuffer, 1020, "checkerr.ini");
 	return errBuffer;
 }
@@ -3730,7 +3730,7 @@ int IsValidMandRecord(TOpenBase& base, int AskEngName, int AutoNmbCheck, const c
 	int IsOtherPolis = *Agent_Code == 0;
 
 	//Проверить номер полиса (выдан ли компании!!!)
-	if(!_IsValidPolisNumber(MANDATORY_SECT, base.GetString(0), base.GetDouble(1), 0, Agent_Code))
+    	if(!_IsValidPolisNumber(MANDATORY_SECT, base.GetString(0), base.GetDouble(1), 0, Agent_Code))
 		return 1;
 /*
 	DATE _1_7_2010;
