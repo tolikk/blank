@@ -1774,7 +1774,7 @@ void MandatoryDlg::Print1()
    memset(str, 0, 3000);
 
    double K3 = 1;
-   char K3s[5]="";
+   char K3s[5]="";             
    if(/*(m_Fizich->GetCheck()||m_IP->GetCheck()) && */regdate >= fstSept)
    {
 	   m_K3->GetText(K3s, sizeof K3s);
@@ -2243,6 +2243,12 @@ void MandatoryDlg::CalculateSumma()
    double K1 = atof(KText);
    double K2 = SendMessage(_m_OldClassAv->HWindow, CB_GETITEMDATA, _m_OldClassAv->GetSelIndex(), 0)/100.;//atof(K2Text);
 
+  // char xxx[128];
+  // sprintf(xxx, "tarif %f glasstarif %f Rate %f", Tarif, GlassTarif, Rate);
+
+  // if(GetAsyncKeyState(VK_CONTROL) & 0x8000)   MessageBox(0, xxx, xxx, 0);
+
+
 
 //QQQ
    int IsFiz_ = (m_Fizich->GetCheck()||m_IP->GetCheck());
@@ -2368,7 +2374,9 @@ void MandatoryDlg::CalculateSumma()
    {
    	//Платим рублями
 //strcat(buffer, "~");
-	 e[20+2]->SetText(buffer); //All fee - подлежит уплдате страховой взнос
+       //	if(GetAsyncKeyState(VK_CONTROL) & 0x8000)   MessageBox(0, "podlejit uplate", buffer, 0);
+
+		 e[20+2]->SetText(buffer); //All fee - подлежит уплдате страховой взнос
 
 	 if(IsFee2State)
 		e[21+2]->SetText("евро"); //ДВА ЭТАПА
@@ -2411,7 +2419,11 @@ void MandatoryDlg::CalculateSumma()
 	 }
    }
 
-   AllSumma = floor(GlassTarif * SuperK * 1000.0) / 1000.0;
+   AllSumma = Tarif; //floor(GlassTarif * SuperK * 1000.0) / 1000.0;
+
+   //sprintf(xxx, "%f %f %f", Tarif, GlassTarif, SuperK);
+
+     //if(GetAsyncKeyState(VK_CONTROL) & 0x8000)   MessageBox(0, xxx, xxx, 0);
 
    if(!IsFee2State)  //1 Pay => rubli
        AllSumma *= Rate;
@@ -2466,12 +2478,15 @@ void MandatoryDlg::CalculateSumma()
 		 else
 			AllSumma = long(AllSumma * 10 + 0.00001) / 10.;	  //AllSumma = long(AllSumma + 0.5);
 	   }
-
+   //Страх взнос Уплачен в сумме
 		DblToStr(buffer, AllSumma, 2);
+	       //	if(GetAsyncKeyState(VK_CONTROL) & 0x8000)   MessageBox(0, buffer, buffer, 0);
+
    //sprintf(buffer, "%f", AllSumma);
 //		strcat(buffer, "!");
 		e[22+2]->SetText(buffer);
 	    e[23+2]->SetText(GetSummaText(atof(buffer), Rubl));
+ //		if(GetAsyncKeyState(VK_CONTROL) & 0x8000)   MessageBox(0, GetSummaText(atof(buffer), buffer, 0);
 	  }
    }
 
