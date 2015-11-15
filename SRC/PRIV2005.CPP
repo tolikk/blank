@@ -778,7 +778,9 @@ int Private2005Dlg::SetDataToBase()
 	   		return 0;
 		}
 		GetWindowText(m_Period1->HWindow, buff, sizeof buff);
-		if(atoi(buff) > 366 || atoi(buff) < 1) {
+		char Limit[16];
+		GetPrivateProfileString(FORMSECTION, "PeriodLimit", "1200", Limit, sizeof Limit, ININame);
+		if(atoi(buff) > atol(Limit) || atoi(buff) < 1) {
 			SetFocus(m_Period1->HWindow);
         	return 0;
 		}
@@ -1122,16 +1124,15 @@ void Private2005Dlg::Print1()
    DATE d2 = GD(buffer.FromDate);
    PXDateDecode(max(d1, d2), &m, &d, &y);
 
-   if(Version2006 == 0)
-   {
+   //{
 		sprintf(dest, "%02d.%02d.%04d", d, m, y);
-   }
-   else
-   {
-	   strcpy(dest, buffer.RegDate);
-   }
+   //}
+  // else
+   //{
+   //	   strcpy(dest, buffer.RegDate);
+   //}
 
-   dest += strlen(dest) + 1;
+   dest += strlen(dest) 	+ 1;
    strcpy(dest, buffer.RegDate);
    dest += strlen(dest) + 1;
    m_AgentCombo->GetText(dest, 32);
