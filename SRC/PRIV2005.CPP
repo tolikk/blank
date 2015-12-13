@@ -1536,21 +1536,27 @@ void Private2005Dlg::FillKs()
 void ToRubles(double& Value);
 
 void Private2005Dlg::RoundSumma(RTMessage)
-{
+{ 
     char buff[32];
-	//m_Sum1Combo->GetText(OldCurr, sizeof OldCurr);
+    char curr[10];
+	m_Sum1Combo->GetText(curr, sizeof curr);
     m_Payment->GetText(buff, sizeof buff);
+
+	 //MessageBox(0, "m_Payment", buff, 0);
+
 	DblToStr(buff, long(atof(buff) + 0.5), 2);
 	m_Payment->SetText(buff);
 	m_Sum1->GetText(buff, sizeof buff);
+	 //MessageBox(0, "set!!!", buff, 0);
 	double summ = atof(buff);
 
-			if(m_InsFiz->GetCheck() == 1 && !strcmp("BRB", OldCurr)) {
+			if(m_InsFiz->GetCheck() == 1 && !strcmp("BRB", curr)) {
 			    ToRubles(summ);
 			}
 			else {
 				summ = long(summ + 0.5);
-                        }
+	//DblToStr(buff, summ, 2);
+			}
 
 
 	DblToStr(buff, summ, 2);
@@ -1693,6 +1699,7 @@ void Private2005Dlg::ChPayCurr(RTMessage msg)
 {
 	if(msg.LP.Hi == CBN_SETFOCUS)
 	{
+            //save parameters to fix summ for next recalc on currency change
 	    m_InsSumCurr->GetText(OldCurr, sizeof OldCurr);
 	    *BaseSumm = 0;
 	}
