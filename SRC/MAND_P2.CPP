@@ -980,12 +980,12 @@ void GetPeriodF::SetupWindow()
 	cb->SetSelIndex(LastMode1);
 
     cb = (TComboBox*)ChildWithId(102);
-	for(i = 2007; i <= 2015; i++) {
+	for(i = 2014; i <= 2020; i++) {
 		char s[10];
 		sprintf(s, "%d", i);
 		cb->AddString(s);
 		if(dt.da_year == i && LastMode2 == -1) {
-			LastMode2 = i - 2007;
+			LastMode2 = i - 2014;
 			//MessageBox(0, "","2",0);
 		}
     }
