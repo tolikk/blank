@@ -85,7 +85,11 @@ struct PetitionData
 		PrintNumbers = 1;
     }
 	char OwnDoc[128];
+	char priv_number[32];
+	char owner_name[128];
+	char owner_address[128];
 	char Discount[128];
+	char build_year[5];
 
 	int PrintNumbers;
 
@@ -99,6 +103,8 @@ struct PetitionData
 	int before2;
 	int after2;
 	int noDriveLic;
+
+        
 };
 
 class PetitionDlg : public TDialog {
@@ -120,7 +126,14 @@ PetitionDlg::PetitionDlg(PTWindowsObject A, PetitionData* adata)
 		  : TDialog(A, "PETITION"), data(adata)
 {
     new TEdit(this, 100, 128);
+
+	new TEdit(this, 120, 32);
+	new TEdit(this, 121, 128);
+	new TEdit(this, 122, 128);
+
 	new TEdit(this, 101, 128);
+	new TEdit(this, 123, 5); //build year
+
 	(Company = new TComboBox(this, 102, 20))->DisableTransfer();
 	new TCheckBox(this, 107, 0);
 	new TEdit(this, 103, 32);
@@ -1050,7 +1063,7 @@ void GetPeriodF::Ok(RTMessage msg)
 	*pMonth = cb->GetSelIndex();
     LastMode1 = *pMonth;
     cb = (TComboBox*)ChildWithId(102);
-    *pYear = cb->GetSelIndex() + 2007;
+    *pYear = cb->GetSelIndex() + 2014;
     LastMode2 = cb->GetSelIndex();
     cb = (TComboBox*)ChildWithId(103);
 	*Mode = cb->GetSelIndex();
@@ -4609,7 +4622,9 @@ void MandatoryDlg::Zajava(RTMessage)
    strcpy(dest, ""); //right upper corner
    dest += strlen(dest) + 1;
 
-   strcpy(dest, buffer.Name); 
+   strcpy(dest, buffer.Name);
+   strcat(dest, " ");
+   strcat(dest, data.priv_number);
    strcat(dest, ", ");
    strcat(dest, buffer.Address);
 
@@ -4627,6 +4642,12 @@ void MandatoryDlg::Zajava(RTMessage)
 	   }
    }
    dest += strlen(dest) + 1;
+
+   strcat(dest, data.owner_name);
+   strcat(dest, ", ");
+   strcat(dest, data.owner_address);
+   dest += strlen(dest) + 1;
+
    Period->GetText(dest, 50);
 
    dest += strlen(dest) + 1;
@@ -4654,6 +4675,45 @@ void MandatoryDlg::Zajava(RTMessage)
    strcpy(dest, buffer.Volume);
 
    dest += strlen(dest) + 1;
+   strcpy(dest, data.build_year);
+
+   dest += strlen(dest) + 1;
+   strcpy(dest, (strcmp(buffer.Letter,"Ð1") && strcmp(buffer.Letter,"Ð2") &&
+		strcmp(buffer.Letter,"P1") && strcmp(buffer.Letter,"P2"))?"X":"");
+
+   dest += strlen(dest) + 1;
+   strcpy(dest, (!strcmp(buffer.Letter,"Ð1") || !strcmp(buffer.Letter,"P1"))?"X":"");
+
+   dest += strlen(dest) + 1;
+   strcpy(dest, (!strcmp(buffer.Letter,"Ð2") || !strcmp(buffer.Letter,"P2"))?"X":"");
+
+
+   //yellow 2 check
+   dest += strlen(dest) + 1;
+   strcpy(dest, (!strcmp(buffer.Letter,"A6") || !strcmp(buffer.Letter,"À6"))?"X":""); //taxi yellow
+   dest += strlen(dest) + 1;
+   strcpy(dest, (!strcmp(buffer.Letter,"A6") || !strcmp(buffer.Letter,"À6"))?"":"X"); //not taxi yellow
+   //taxi 2 chek
+   dest += strlen(dest) + 1;
+   strcpy(dest, (!strcmp(buffer.Letter,"A6") || !strcmp(buffer.Letter,"À6"))?"X":""); //taxi yellow
+   dest += strlen(dest) + 1;
+   strcpy(dest, (!strcmp(buffer.Letter,"A6") || !strcmp(buffer.Letter,"À6"))?"":"X"); //taxi yellow
+
+
+   //////////
+
+   dest += strlen(dest) + 1;
+   strcpy(dest, (!strcmp(buffer.Letter,"L4"))?"X":""); //regular
+
+   dest += strlen(dest) + 1;
+   strcpy(dest, (!strcmp(buffer.Letter,"L1") && !strcmp(buffer.Letter,"L2") && !strcmp(buffer.Letter,"L3"))?"X":""); //not regular
+
+
+
+
+
+
+/*   dest += strlen(dest) + 1;
    strcpy(dest, !strcmp(buffer.Letter,"A6")?"X":""); //Taxi
 
    dest += strlen(dest) + 1;
@@ -4664,7 +4724,7 @@ void MandatoryDlg::Zajava(RTMessage)
 
    dest += strlen(dest) + 1;
    strcpy(dest, strcmp(buffer.Letter,"L4")?"X":""); //Not Bus
-
+*/
    dest += strlen(dest) + 1;
    strcpy(dest, data.Discount);
 
@@ -4678,7 +4738,10 @@ void MandatoryDlg::Zajava(RTMessage)
    strcpy(dest, buffer.Nal ? "X" : "");
 
    dest += strlen(dest) + 1;
-   strcpy(dest, !buffer.Nal ? "X" : ""); 
+   strcpy(dest, !buffer.Nal && !buffer.Karta ? "X" : "");
+
+   dest += strlen(dest) + 1;
+   strcpy(dest, buffer.Karta ? "X" : "");
 
    dest += strlen(dest) + 1;
    strcpy(dest, *data.Company ? data.Company :

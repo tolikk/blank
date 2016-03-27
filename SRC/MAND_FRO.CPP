@@ -663,3 +663,5 @@ void MandatoryDlg::GetDataFromBase()
    UpdateFormData-=10;
 }
 
+
+//

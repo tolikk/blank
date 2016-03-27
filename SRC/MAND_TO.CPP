@@ -885,3 +885,4 @@ int MandatoryDlg::SetDataToBase()
    return 1;
 }
 
+	 //
