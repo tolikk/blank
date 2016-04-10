@@ -93,6 +93,14 @@ char AgPercent2[6];
 char RetDate1[11];
 char RetDate2[11];
 
+
+char IdNumber[30 + 1];
+char NameOwn[70 + 1];
+char AddressOwn[65 + 1];
+char BuildYear[5];
+
+
+
 /////////// TAXI
    char TaxiSumma[10];
    char TaxiPayDate[11];
@@ -118,7 +126,8 @@ int _CarCode_;
 char Seria[4 + 1];
 char PrevSeria[4 + 1];
 
-char SuperBuffer[32];
+
+   char SuperBuffer[32];
 };
 
 int aux_save_fields_to_file2(TOpenBase* base, FILE* f, char* Op, int Komplex);
@@ -267,6 +276,11 @@ class MandatoryDlg: public Dlg_base
 
 	 TEdit*        m_RetDate1;
 	 TEdit*        m_RetDate2;
+
+	 TEdit*        _m_IdNumber;
+	 TEdit*        _m_NameOwn;
+	 TEdit*        _m_AddrOwn;
+	 TEdit*  _m_BuildYear;
 
 	 TComboBox*    m_Resident;
      Array         m_TableKeyNames;
