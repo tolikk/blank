@@ -379,6 +379,11 @@ void MandatoryDlg::GetDataFromBase()
 	(*base)((char*)&buffer.SMS, 2, 73);
 	buffer.SMS = !!buffer.SMS;
 
+	(*base)(buffer.IdNumber, sizeof buffer.IdNumber, 74);
+	(*base)(buffer.NameOwn, sizeof buffer.NameOwn, 75);
+	(*base)(buffer.AddressOwn, sizeof buffer.AddressOwn, 76);
+	(*base)(buffer.BuildYear, sizeof buffer.BuildYear, 77);
+
 //PART2 END
 
 	ModifyMandatory = 0;
@@ -392,25 +397,25 @@ void MandatoryDlg::GetDataFromBase()
 
    if(Komplex )
    {
-	   (*base)(N, 74);
+	   (*base)(N, 74+4);
 	   DblToStr(buffer.TaxiSumma, fabs(N), 2);
 		m_TaxiInOut->SetSelIndex(N == 0 ? 0 : N > 0 ? 1: 2);
 
-	   (*base)(N, 79);
+	   (*base)(N, 79+4);
 	   DblToStr(buffer.TaxiPayDoc, N, 0);
 
-	   ::DateFBToStr(base, 78, buffer.TaxiPayDate);
+	   ::DateFBToStr(base, 78+4, buffer.TaxiPayDate);
 
        char buff[4];
-	   (*base)(buff, sizeof buff, 75);
+	   (*base)(buff, sizeof buff, 75+4);
 	   m_TaxiPayCurr->SetSelIndex(-1);
 	   m_TaxiPayCurr->SetText(buff);
 
-	   (*base)(buff, sizeof buff, 76);
+	   (*base)(buff, sizeof buff, 76+4);
 	   buffer.TaxiIsNal = buff[0] = 'Y';
-	   (*base)(buff, sizeof buff, 77);
+	   (*base)(buff, sizeof buff, 77+4);
 	   buffer.Taxi1SU = buff[0] = 'Y';
-	   (*base)(buff, sizeof buff, 80);
+	   (*base)(buff, sizeof buff, 80+4);
 
 		m_TaxiVid->SetSelIndex(buff[0] == 0 ? 0 : (buff[0] - '0'));
    }

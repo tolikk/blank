@@ -225,18 +225,19 @@ unsigned char lenMandatory[] = {
 			     13,
 			     70 + 1,//name
 			     65 + 1,//address
+
 			     11, //fromdate
 			     6,  //fromtime
 			     11, //todate
 			     4,  //letter
 			     31, //marka
-			     11,
-			     11,
-			     11,
-			     11,
-			     11,
-			     21,
-			     21,
+			     11, //number
+			     11, //vol
+			     11, //tonnage
+			     11, //passager
+			     11, //power
+			     21, //num body
+			     21, //num shassis
 			     11,
 			     11,
 			     3,  //Discount - скидка
@@ -346,13 +347,20 @@ char* MandatoryFields[] = {
 "contact",          //72
 "sms",          //73
 
-"S0",           //74
-"Curr0",        //75
-"Nal0",         //76
-"SU0",          //77
-"D0",           //78
-"Doc0",         //79
-"TYP0"          //80
+"IdNum",       //74
+"NameOwn",     //75
+"AddressOwn",  //76
+"BuildYear"    //77
+
+
+"S0",           //78
+"Curr0",        //79
+"Nal0",         //80
+"SU0",          //81
+"D0",           //82
+"Doc0",         //83
+"TYP0"          //84
+
 };
 
 void ToRubles(double& Value)
@@ -382,8 +390,8 @@ int IsLetter(unsigned long Data)
     return Letter < '0' || Letter > '9';
 }
 
-unsigned char MandatoryCnt = 74;
-unsigned char KomplexCnt = 81;
+unsigned char MandatoryCnt = 78;
+unsigned char KomplexCnt = 85;
 
 char* Avaria2Fields[] = {
 "Seria",         //0
@@ -675,6 +683,14 @@ MandatoryDlg::MandatoryDlg(PTWindowsObject p, int Komplex)
 
    m_RetDate1 = new TDateEdit(this, 69, 11);
    m_RetDate2 = new TDateEdit(this, 70, 11);
+
+
+   _m_IdNumber = new TEdit(this, 98, 31);
+   _m_NameOwn = new TEdit(this, 96, 71);
+   _m_AddrOwn = new TEdit(this, 97, 66);
+   _m_BuildYear = new NumberEdit(this, 99, 5, 0);
+
+
 
 
    ///TAXI
@@ -2964,7 +2980,7 @@ void MandatoryDlg::IsAvaria(RTMessage msg)
 }
 
 void MandatoryDlg::IsPhoto(RTMessage)
-{
+{   
 	ShowWindow(GetDlgItem(HWindow, 10000), SW_SHOW);
 	ShowWindow(GetDlgItem(HWindow, 474), SW_SHOW);
 	ShowWindow(GetDlgItem(HWindow, 460), SW_SHOW);
@@ -3029,6 +3045,7 @@ void MandatoryDlg::IsPhoto(RTMessage)
 void MandatoryDlg::OpenClose()
 {
 	ASS();
+	//MessageBox(0, "", "", 0);
 	 RECT r;
      GetWindowRect(HWindow, &r);
 	 int WndWidth = r.right - r.left;

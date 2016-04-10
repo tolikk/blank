@@ -764,6 +764,9 @@ int MandatoryDlg::SetDataToBase()
    //}
 
   (*base)(62, buffer.ToReport?101.:100.);
+   struct date d;
+   getdate(&d);
+
    if(!Bad) {
       // if (buffer.OwnerCode > 0)
 	  //(*base)(61, (double)buffer.OwnerCode);
@@ -806,10 +809,19 @@ int MandatoryDlg::SetDataToBase()
 	   (*base)(71, buffer.HomePhone);
 	   (*base)(72, buffer.Contact);
 	   (*base)(73, buffer.SMS ? "1" : "");
+
+	   (*base)(74, buffer.IdNumber);
+	   (*base)(75, buffer.NameOwn);
+	   (*base)(76, buffer.AddressOwn);
+	   (*base)(77, buffer.BuildYear);
+
+	   if(*buffer.BuildYear && (atoi(buffer.BuildYear) < (d.da_year-100) ||
+	        atoi(buffer.BuildYear) > d.da_year)) {
+              SetFocus(_m_BuildYear->HWindow);
+              return 0;
+           }
    }
 
-   struct date d;
-   getdate(&d);
    PXDateEncode(d.da_mon, d.da_day, d.da_year, &date);
    if(OwnPolis && date < regdate) {
 	   MessageBox(HWindow, GetRCStr(612), "!", MB_ICONSTOP);
@@ -834,7 +846,7 @@ int MandatoryDlg::SetDataToBase()
             return 0;
            }
 		   if(m_TaxiInOut->GetSelIndex() == 2) summ = -summ;
-		  (*base)(74, summ);
+		  (*base)(74+4, summ);
 
 		  DATE dt = GD(buffer.TaxiPayDate);
 	   if(dt < FROM_DATE || dt > TO_DATE)
@@ -842,7 +854,7 @@ int MandatoryDlg::SetDataToBase()
 			MessageBox(HWindow, "Даипазон", "!", MB_OK | MB_ICONSTOP);
 			return 0;
        }
-		  (*base)(78, dt);
+		  (*base)(78+4, dt);
 
 		   if(dt == 0)
 		   {
@@ -857,18 +869,18 @@ int MandatoryDlg::SetDataToBase()
 			SetFocus(m_TaxiPayCurr->HWindow);
             return 0;
            }
-		  (*base)(75, buff);
+		  (*base)(75+4, buff);
 		  buff[1] = 0;
 
 		  buff[0] = (buffer.TaxiIsNal == 1 ? 'Y' : 'N');
-		  (*base)(76, buff);
+		  (*base)(76+4, buff);
 		  buff[0] = (buffer.Taxi1SU == 1 ? 'Y' : 'N');
-		  (*base)(77, buff);
+		  (*base)(77+4, buff);
 
 		  buff[0] = '0' + m_TaxiVid->GetSelIndex();
-		  (*base)(80, m_TaxiVid->GetSelIndex() == 0 ? "" : buff);
+		  (*base)(80+4, m_TaxiVid->GetSelIndex() == 0 ? "" : buff);
 
-		  (*base)(79, atof(buffer.TaxiPayDoc));
+		  (*base)(79+4, atof(buffer.TaxiPayDoc));
 		   if(buffer.Taxi1SU && atof(buffer.TaxiPayDoc) == 0)
 		   {
 			SetFocus(m_TaxiDoc->HWindow);

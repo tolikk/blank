@@ -85,11 +85,11 @@ struct PetitionData
 		PrintNumbers = 1;
     }
 	char OwnDoc[128];
-	char priv_number[32];
-	char owner_name[128];
-	char owner_address[128];
+	//char priv_number[32];
+	//char owner_name[128];
+	//char owner_address[128];
 	char Discount[128];
-	char build_year[5];
+	//char build_year[5];
 
 	int PrintNumbers;
 
@@ -127,12 +127,12 @@ PetitionDlg::PetitionDlg(PTWindowsObject A, PetitionData* adata)
 {
     new TEdit(this, 100, 128);
 
-	new TEdit(this, 120, 32);
-	new TEdit(this, 121, 128);
-	new TEdit(this, 122, 128);
+	//new TEdit(this, 120, 32);
+	//new TEdit(this, 121, 128);
+	//new TEdit(this, 122, 128);
 
 	new TEdit(this, 101, 128);
-	new TEdit(this, 123, 5); //build year
+	//new TEdit(this, 123, 5); //build year
 
 	(Company = new TComboBox(this, 102, 20))->DisableTransfer();
 	new TCheckBox(this, 107, 0);
@@ -4611,6 +4611,7 @@ void MandatoryDlg::Zajava(RTMessage)
    PetitionData data;
    if(*buffer.PrevSeria)
 	   sprintf(data.SN, "%s/%s", buffer.PrevSeria, buffer.PrevNumber);
+
    PetitionDlg* dlg = new PetitionDlg(this, &data);
    if(GetModule()->ExecDialog(dlg) != IDOK) return;
 
@@ -4624,7 +4625,7 @@ void MandatoryDlg::Zajava(RTMessage)
 
    strcpy(dest, buffer.Name);
    strcat(dest, " ");
-   strcat(dest, data.priv_number);
+   strcat(dest, buffer.IdNumber);
    strcat(dest, ", ");
    strcat(dest, buffer.Address);
 
@@ -4643,9 +4644,9 @@ void MandatoryDlg::Zajava(RTMessage)
    }
    dest += strlen(dest) + 1;
 
-   strcat(dest, data.owner_name);
+   strcat(dest, buffer.NameOwn);
    strcat(dest, ", ");
-   strcat(dest, data.owner_address);
+   strcat(dest, buffer.AddressOwn);
    dest += strlen(dest) + 1;
 
    Period->GetText(dest, 50);
@@ -4672,10 +4673,19 @@ void MandatoryDlg::Zajava(RTMessage)
    strcpy(dest, *buffer.NumberBody ? buffer.NumberBody : buffer.Chassis);
 
    dest += strlen(dest) + 1;
-   strcpy(dest, buffer.Volume);
+   if(*buffer.Volume)
+     strcpy(dest, buffer.Volume);
+   else if(*buffer.Tonnage)
+     strcpy(dest, buffer.Tonnage);
+   else if(*buffer.Quantity)
+     strcpy(dest, buffer.Quantity);
+   else if(*buffer.Power)
+     strcpy(dest, buffer.Power);
+   else
+     strcpy(dest, "");
 
    dest += strlen(dest) + 1;
-   strcpy(dest, data.build_year);
+   strcpy(dest, buffer.BuildYear);
 
    dest += strlen(dest) + 1;
    strcpy(dest, (strcmp(buffer.Letter,"Ð1") && strcmp(buffer.Letter,"Ð2") &&
